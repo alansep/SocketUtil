@@ -1,4 +1,4 @@
-package br.com.socketutil.core;
+package br.com.socketutil.core.service;
 
 import br.com.socketutil.core.pattern.SocketInterface;
 

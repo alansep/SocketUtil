@@ -1,4 +1,4 @@
-package br.com.socketutil.core;
+package br.com.socketutil.core.service;
 
 import static org.junit.Assert.assertEquals;
 
