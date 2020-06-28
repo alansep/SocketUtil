@@ -4,8 +4,8 @@ import br.com.socketutil.core.pattern.SocketInterface;
 
 public class SocketUtil {
 
-	public static SocketInterface getInstance() {
-		return new Communicator();
+	public static SocketInterface getInstance(int inputPort, int outputPort, String ip) {
+		return new Communicator(inputPort, outputPort, ip);
 	}
 	
 }

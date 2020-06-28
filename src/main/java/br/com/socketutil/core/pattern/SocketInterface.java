@@ -8,4 +8,7 @@ public interface SocketInterface {
 	List<String> getUnreadMessages();
 	void sendMessage(String message);
 	boolean hasNewMessages();
+	int getInputPort();
+	int getOutputPort();
+	String getOutputIp();
 }

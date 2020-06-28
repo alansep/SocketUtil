@@ -1,14 +1,12 @@
 package br.com.socketutil.core.service;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 public class CommunicatorTest {
 
-	@Test
-	public void deveReceberInstanciaDeComunicador() {
-		assertEquals(new Communicator() instanceof Communicator, SocketUtil.getInstance() instanceof Communicator);
+	@Test(expected = IllegalArgumentException.class)
+	public void getInstanceExceptionTest() {
+		SocketUtil.getInstance(-20, 20, "192.28.0.1");
 	}
 
 }
