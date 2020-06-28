@@ -15,10 +15,10 @@ public class Communicator implements SocketInterface {
 	private Input input;
 	private Output output;
 
-	Communicator(int inputPort, int outputPort) {
+	Communicator(int inputPort, int outputPort, String ip) {
 		setValues(inputPort, outputPort);
 		input = new Input(inputPort, this, false);
-		output = new Output(outputPort, this, false);
+		output = new Output(outputPort, ip, this, false);
 		ThreadRunner.run(input, output);
 	}
 
@@ -53,8 +53,8 @@ public class Communicator implements SocketInterface {
 	}
 
 	@Override
-	public void initializeOutput(int port) {
-		output = new Output(port, this, true);
+	public void initializeOutput(int port, String ip) {
+		output = new Output(port, ip, this, true);
 		ThreadRunner.run(output);
 	}
 

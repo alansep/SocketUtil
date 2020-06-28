@@ -6,7 +6,7 @@ public class CommunicatorTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void getInstanceExceptionTest() {
-		SocketUtil.getInstance(-20, 20);
+		SocketUtil.getInstance(-20);
 	}
 
 }

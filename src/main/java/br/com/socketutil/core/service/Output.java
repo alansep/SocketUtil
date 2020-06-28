@@ -12,9 +12,11 @@ public class Output implements Runnable {
 	private int port;
 	private SocketInterface communicator;
 	private boolean reactive;
+	private String ip;
 
-	Output(int port, SocketInterface communicator, boolean reactive) {
+	Output(int port, String ip, SocketInterface communicator, boolean reactive) {
 		this.port = port;
+		this.ip = ip;
 		this.communicator = communicator;
 		this.reactive = reactive;
 	}
@@ -23,7 +25,7 @@ public class Output implements Runnable {
 	public void run() {
 		try {
 			System.out.println(port);
-			Socket client = new Socket("127.0.0.1", port);
+			Socket client = new Socket(ip, port);
 			System.out.println("A client has just connected to the server!");
 			Scanner scanner = new Scanner(System.in);
 			PrintStream outputStream = new PrintStream(client.getOutputStream());

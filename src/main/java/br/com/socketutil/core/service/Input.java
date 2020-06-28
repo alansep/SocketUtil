@@ -31,7 +31,7 @@ public class Input implements Runnable {
 			Scanner scanner = new Scanner(client.getInputStream());
 			while (scanner.hasNextLine()) {
 				if (firstExecution && reactiveMode) {
-					communicator.initializeOutput(Integer.parseInt(scanner.nextLine()));
+					communicator.initializeOutput(Integer.parseInt(scanner.nextLine()), client.getInetAddress().getHostAddress());
 					firstExecution = false;
 				} else {
 					String text = scanner.nextLine();
