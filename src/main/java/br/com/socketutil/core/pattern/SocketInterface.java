@@ -11,4 +11,5 @@ public interface SocketInterface {
 	int getInputPort();
 	int getOutputPort();
 	String getOutputIp();
+	public void initializeOutput(int port);
 }

@@ -1,12 +1,10 @@
 package br.com.socketutil.core.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.socketutil.core.pattern.SocketInterface;
 import br.com.socketutil.core.pattern.Validator;
-import br.com.socketutil.core.validators.IpGroupsValidator;
-import br.com.socketutil.core.validators.IpNumberValidator;
+import br.com.socketutil.core.util.ThreadRunner;
 import br.com.socketutil.core.validators.PortRangeValidator;
 
 public class Communicator implements SocketInterface {
@@ -14,15 +12,20 @@ public class Communicator implements SocketInterface {
 	private int inputPort;
 	private int outputPort;
 	private String ip;
+	private Input input;
+	private Output output;
 
-	Communicator(int inputPort, int outputPort, String outputIp) {
-		if (validInput(inputPort, outputPort, outputIp)) {
-			this.inputPort = inputPort;
-			this.outputPort = outputPort;
-			this.ip = outputIp;
-		} else {
-			throw new IllegalArgumentException("Invalid Parameters");
-		}
+	Communicator(int inputPort, int outputPort) {
+		setValues(inputPort, outputPort);
+		input = new Input(inputPort, this, false);
+		output = new Output(outputPort, this, false);
+		ThreadRunner.run(input, output);
+	}
+
+	Communicator(int inputPort) {
+		setValues(inputPort);
+		input = new Input(inputPort, this, true);
+		ThreadRunner.run(input);
 	}
 
 	@Override
@@ -50,6 +53,50 @@ public class Communicator implements SocketInterface {
 	}
 
 	@Override
+	public void initializeOutput(int port) {
+		output = new Output(port, this, true);
+		ThreadRunner.run(output);
+	}
+
+	private boolean isInputValid(int inputPort, int outputPort) {
+		boolean isValid = true;
+
+		Validator<Integer> portValidator = new PortRangeValidator();
+
+		isValid = isValid && portValidator.isValid(inputPort);
+		isValid = isValid && portValidator.isValid(outputPort);
+
+		return isValid;
+	}
+
+	private boolean isInputValid(int inputPort) {
+		boolean isValid = true;
+
+		Validator<Integer> portValidator = new PortRangeValidator();
+
+		isValid = isValid && portValidator.isValid(inputPort);
+
+		return isValid;
+	}
+
+	private void setValues(int inputPort, int outputPort) {
+		if (isInputValid(inputPort, outputPort)) {
+			this.inputPort = inputPort;
+			this.outputPort = outputPort;
+		} else {
+			throw new IllegalArgumentException("Invalid Parameters!");
+		}
+	}
+
+	private void setValues(int inputPort) {
+		if (isInputValid(inputPort)) {
+			this.inputPort = inputPort;
+		} else {
+			throw new IllegalArgumentException("Invalid Parameters!");
+		}
+	}
+
+	@Override
 	public int getInputPort() {
 		return inputPort;
 	}
@@ -58,27 +105,10 @@ public class Communicator implements SocketInterface {
 	public int getOutputPort() {
 		return outputPort;
 	}
-	
+
 	@Override
 	public String getOutputIp() {
 		return ip;
 	}
-
-	private boolean validInput(int inputPort, int outputPort, String ip) {
-		boolean isValid = true;
-
-		Validator<Integer> portValidator = new PortRangeValidator();
-		List<Validator<String>> ipValidators = Arrays.asList(new IpNumberValidator(), new IpGroupsValidator());
-
-		isValid = isValid && portValidator.isValid(inputPort);
-		isValid = isValid && portValidator.isValid(outputPort);
-
-		for (Validator<String> validator : ipValidators) {
-			isValid = isValid && validator.isValid(ip);
-		}
-		return isValid;
-	}
-
-	
 
 }
